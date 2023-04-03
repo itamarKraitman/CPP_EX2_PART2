@@ -48,7 +48,7 @@ using namespace std;
 
     int Player::stacksize() const
     { 
-        return this->stackSize; 
+        return this->stack.size(); 
     }
 
     int Player::cardesTaken() const
@@ -61,13 +61,13 @@ using namespace std;
         Card topCard;
         if (stackSize > 0)
         {
-            stackSize--;
             topCard = this->stack.front();
             stack.erase(stack.begin()); // remove first element
+            this->stackSize = this->stack.size();
         }
         else
         {
-            cout << this->name << " is running out of cards";
+            throw runtime_error(" Game ends, is running out of cards");
         }
         return topCard;
     }
@@ -89,6 +89,7 @@ using namespace std;
 
     void Player::pushToStack(const Card& card) {
         this->stack.push_back(card);
+        this->stackSize++;
     }
 
     vector<Card> Player::getStack()
