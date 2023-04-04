@@ -8,7 +8,7 @@ using namespace std;
 
 // namespace ariel
 // {
-   
+
 Game::Game(Player &player1, Player &player2) : p1(player1), p2(player2)
 {
     if (player1.registred() || player2.registred())
@@ -83,10 +83,12 @@ void Game::playTurn()
     {
         throw runtime_error("The game has only one player");
     }
-    int numberOfCardsThrewInTurn = 2; // in each turn at least 2 cards are thrown
-    if (turnCounter == 26){
-        throw runtime_error("Game ends after 26 turns at most");
+    if (turnCounter == 26)
+    {
+        throw runtime_error("Game is over, can't play turns anymore");
     }
+    int numberOfCardsThrewInTurn = 2; // in each turn at least 2 cards are thrown
+
     // both players throw cards
     Card p1Card = p1.putCard();
     Card p2Card = p2.putCard();
@@ -137,9 +139,12 @@ void Game::printLastTurn()
 
 void Game::playAll()
 {
-
-    playTurn();
-    turnCounter++;
+    while (p1.getStack().size() > 0 && p2.getStack().size() > 0)
+    {
+        playTurn();
+        turnCounter++;
+    }
+    turnCounter = 0; // after the game is ended, modify to 0 so the next game could be played
 }
 
 void Game::printWiner()

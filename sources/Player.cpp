@@ -48,7 +48,7 @@ using namespace std;
 
     int Player::stacksize() const
     { 
-        return this->stack.size(); 
+        return this->stackSize; 
     }
 
     int Player::cardesTaken() const
@@ -63,7 +63,7 @@ using namespace std;
         {
             topCard = this->stack.front();
             stack.erase(stack.begin()); // remove first element
-            this->stackSize = this->stack.size();
+            this->stackSize--;
         }
         else
         {

@@ -59,7 +59,9 @@ TEST_CASE("Activating another turn after the game is over")
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);
+    cout << p1.stacksize() << " " << p2.stacksize() << endl;
     game.playAll();
+    cout << p1.stacksize() << " " << p2.stacksize() << endl;
     CHECK(p1.stacksize() == 0);
     CHECK(p2.stacksize() == 0);
     CHECK_THROWS(game.playTurn());
