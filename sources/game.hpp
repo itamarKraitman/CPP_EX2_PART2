@@ -12,9 +12,8 @@
 
 using namespace std;
 
-// namespace ariel {
+namespace ariel {
     class Game {
-        vector<Card> deck;
         Player& p1;
         Player& p2;
         string winner;
@@ -35,8 +34,6 @@ using namespace std;
 
         ~Game();
 
-        void generateDeckAndDeal();
-
         void playTurn();
 
         void printLastTurn();
@@ -51,4 +48,4 @@ using namespace std;
 
         Player getWinner();
     };
-// }
+}

@@ -6,8 +6,8 @@
 
 using namespace std;
 
-// namespace ariel
-// {
+namespace ariel
+{
 
     Player::Player(const string name) : name(name)
     {
@@ -58,18 +58,20 @@ using namespace std;
 
     Card Player::putCard()
     { // puts the next card from player's deck
-        Card topCard;
+        // Card topCard;
         if (stackSize > 0)
         {
-            topCard = this->stack.front();
+            Card& topCard = this->stack.front();
             stack.erase(stack.begin()); // remove first element
             this->stackSize--;
+            int i = 0;
+            return topCard;
         }
         else
         {
-            throw runtime_error(" Game ends, is running out of cards");
+            string s = "Game ends " + this->name + " is running out of cards";
+            throw runtime_error(s);
         }
-        return topCard;
     }
 
     void Player::addCardsToPlayerTaken(int amountToAdd) 
@@ -136,4 +138,4 @@ using namespace std;
     {
         this->wins++;
     }
-// }
+}

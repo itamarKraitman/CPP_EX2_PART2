@@ -7,7 +7,7 @@
 
 using namespace std;
 
-// namespace ariel{
+namespace ariel{
     class Player {
         private:
 
@@ -72,4 +72,4 @@ using namespace std;
 
         void setWins();
     };
-// }
+}

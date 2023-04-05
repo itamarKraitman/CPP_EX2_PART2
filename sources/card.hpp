@@ -10,7 +10,7 @@ using namespace std;
 
 
 
-// namespace ariel {
+namespace ariel {
 
     enum signs {
         Clubs = 0,
@@ -50,4 +50,4 @@ using namespace std;
         string numberAndSignAsString() const;
 
     };
-// }
+}
