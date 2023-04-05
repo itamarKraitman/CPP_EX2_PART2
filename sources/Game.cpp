@@ -26,25 +26,22 @@ namespace ariel
             {
                 Card newCard(i + 1, j);
                 deck.push_back(newCard);
-                cout << "deck bask is: " << deck.back().toString() << endl;
             }
         }
 
         // shuffle the deck
         unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-        shuffle(deck.begin(), deck.end(), default_random_engine(seed));
+        shuffle(deck.begin(), deck.end(), default_random_engine());
 
         for (int i = 0; i < 26; i++)
         {
             Card card1 = deck.back();
             deck.pop_back();
             p1.pushToStack(card1);
-            cout << "Card dealt to player 1: " << card1.toString() << endl;
 
             Card card2 = deck.back();
             deck.pop_back();
             p2.pushToStack(card2);
-            cout << "Card dealt to player 2: " << card2.toString() << endl;
         }
     }
 
@@ -62,6 +59,7 @@ namespace ariel
 
     void Game::playTurn()
     {
+        // cout << "turn: p1 stack: " << p1.getStack().size() << " p2 stack: " << p2.getStack().size() << endl;
         if (&p1 == &p2)
         {
             throw runtime_error("The game has only one player");
@@ -75,10 +73,15 @@ namespace ariel
         // both players throw cards
         Card p1Card = p1.putCard();
         Card p2Card = p2.putCard();
+        cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
+        cout.flush();
 
         this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
         while (p1Card.getNumber() == p2Card.getNumber()) // war scenario, until there is no draw so no war
         {
+            cout << "Draw!" <<endl;
+            cout.flush();
+
             this->lastTurnLog << " draw.";
             p1.setNumberOfDraws();
             p2.setNumberOfDraws();
@@ -87,9 +90,14 @@ namespace ariel
             // both put card down- need to check if not causing data leak
             p1.putCard();
             p2.putCard();
+            // putCard(p1);
+            // putCard(p2);
             // both put card up
             p1Card = p1.putCard();
             p2Card = p2.putCard();
+            cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
+            cout.flush();
+
             // add playes to lastTurnLog
             this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
             numberOfCardsThrewInTurn += 4;
@@ -100,6 +108,9 @@ namespace ariel
         {
             if (p2Card.getNumber() == 1 && p1Card.getNumber() == 2) // Ace wins 2
             {
+                cout << "p2 wins"<< endl;;
+                cout.flush();
+
                 p2.setWins();
                 p2.setWinRate();
                 p2.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
@@ -107,6 +118,9 @@ namespace ariel
             }
             else
             {
+                cout << "p1 wins" <<endl;
+                cout.flush();
+
                 p1.setWins();
                 p1.setWinRate();
                 p1.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
@@ -117,13 +131,18 @@ namespace ariel
         {
             if (p1Card.getNumber() == 1 && p2Card.getNumber() == 2) // Ace wins 2
             {
+                cout << "p1 wins" << endl;
+                cout.flush();
+
                 p1.setWins();
                 p1.setWinRate();
                 p1.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
-                this->lastTurnLog << "p2 wins.\n";
+                this->lastTurnLog << "p1 wins.\n";
             }
             else
             {
+                cout << "p2 wins" << endl;
+                cout.flush();
                 p2.setWins();
                 p2.setWinRate();
                 p2.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
@@ -134,6 +153,21 @@ namespace ariel
         this->lastTurnLog << "";
     }
 
+    // Card Game::putCard(Player& player)
+    // { // puts the next card from player's deck
+    //     if (player.getStack().size() > 0)
+    //     {
+    //         Card topCard = player.getStack().front();
+    //         player.getStack().erase(player.getStack().begin()); // remove first element
+    //         return topCard;
+    //     }
+    //     else
+    //     {
+    //         string s = "Game ends " + player.getName() + " is running out of cards, stack: " + to_string(player.getStack().size());
+    //         throw runtime_error(s);
+    //     }
+    // }
+
     void Game::printLastTurn()
     {
         cout << this->lastTurnLog.str() << endl;
@@ -141,8 +175,10 @@ namespace ariel
 
     void Game::playAll()
     {
-        while (p1.getStack().size() > 0 && p2.getStack().size() > 0)
+        // cout << "p1 stack: " << p1.getStack().size() << " p2 stack: " << p2.getStack().size() << endl;
+        while (p1.getStack().size() > 0 && p2.getStack().size() > 0 && turnCounter < 26)
         {
+            cout << turnCounter << endl;
             playTurn();
             turnCounter++;
         }

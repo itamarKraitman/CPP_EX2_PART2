@@ -12,7 +12,6 @@ namespace ariel
     Player::Player(const string name) : name(name)
     {
         this->stackSize = 0;
-        // this->stack;
         this->taken = 0;
         this->isRegistred = false;
         this->winRate = 0;
@@ -48,7 +47,7 @@ namespace ariel
 
     int Player::stacksize() const
     { 
-        return this->stackSize; 
+        return this->stack.size(); 
     }
 
     int Player::cardesTaken() const
@@ -58,18 +57,16 @@ namespace ariel
 
     Card Player::putCard()
     { // puts the next card from player's deck
-        // Card topCard;
-        if (stackSize > 0)
+        if (this->stack.size() > 0)
         {
-            Card& topCard = this->stack.front();
+            Card topCard = this->stack.front();
             stack.erase(stack.begin()); // remove first element
-            this->stackSize--;
-            int i = 0;
             return topCard;
         }
         else
         {
-            string s = "Game ends " + this->name + " is running out of cards";
+            cout << "name " << this->name << "stack: " << this->stackSize;
+            string s = "Game ends " + this->name + " is running out of cards, stack: " + to_string(this->stack.size());
             throw runtime_error(s);
         }
     }
@@ -91,7 +88,7 @@ namespace ariel
 
     void Player::pushToStack(const Card& card) {
         this->stack.push_back(card);
-        this->stackSize++;
+        // cout << "name: " << this->name << " stack size: " << this->stack.size() << endl;
     }
 
     vector<Card> Player::getStack()

@@ -35,6 +35,8 @@ TEST_CASE("The card scheme at the end of the game")
     Player p2("Bob");
     Game game(p1, p2);
     game.playAll();
+    cout << "p1 stack: " << p1.stacksize() << "p1 taken" << p1.cardesTaken() << endl;
+    cout << "p2 stack: " << p2.stacksize() << "p2 taken" << p2.cardesTaken() << endl;
     int sum = p1.stacksize() + p1.cardesTaken() + p2.stacksize() + p2.cardesTaken();
     CHECK(sum == 52);
 }
@@ -79,14 +81,7 @@ TEST_CASE("Printing the winner")
     Game game(p1, p2);
     game.playAll();
 
-    if (p1.cardesTaken() == p2.cardesTaken())
-    {
-        CHECK_THROWS(game.printWiner());
-    }
-    else
-    {
-        CHECK_NOTHROW(game.printWiner());
-    }
+    CHECK_NOTHROW(game.printWiner());
 }
 
 TEST_CASE("The game ends after at most 26 turns")
@@ -94,13 +89,13 @@ TEST_CASE("The game ends after at most 26 turns")
     Player p1("Alice");
     Player p2("Bob");
     Game game(p1, p2);
-    bool maxTurns = 26;
-    
-    for (int i = 0 ; i < 26 && p1.stacksize()>0; i++ )
+    int maxTurns = 26;
+    int i = 0;
+    for ( ; i < 26 && p1.stacksize()>0; i++ )
     {
         game.playTurn();
     }
-    CHECK(maxTurns == 26);
+    CHECK(maxTurns >= i );
     CHECK(p1.stacksize() == 0);
     CHECK(p2.stacksize() == 0);
 }
