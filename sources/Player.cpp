@@ -91,7 +91,7 @@ namespace ariel
         // cout << "name: " << this->name << " stack size: " << this->stack.size() << endl;
     }
 
-    vector<Card> Player::getStack()
+    vector<Card>& Player::getStack()
     {
         return this->stack;
     }

@@ -38,10 +38,12 @@ namespace ariel
             Card card1 = deck.back();
             deck.pop_back();
             p1.pushToStack(card1);
+            cout << "p1 dealt: " << p1.getStack().back().toString() << endl;
 
             Card card2 = deck.back();
             deck.pop_back();
             p2.pushToStack(card2);
+            cout << "p2 dealt: " << p1.getStack().back().toString() << endl;
         }
     }
 
@@ -73,13 +75,14 @@ namespace ariel
         // both players throw cards
         Card p1Card = p1.putCard();
         Card p2Card = p2.putCard();
+       
         cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
         cout.flush();
-
         this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
         while (p1Card.getNumber() == p2Card.getNumber()) // war scenario, until there is no draw so no war
         {
-            cout << "Draw!" <<endl;
+          
+            cout << "Draw!" << endl;
             cout.flush();
 
             this->lastTurnLog << " draw.";
@@ -90,14 +93,11 @@ namespace ariel
             // both put card down- need to check if not causing data leak
             p1.putCard();
             p2.putCard();
-            // putCard(p1);
-            // putCard(p2);
             // both put card up
             p1Card = p1.putCard();
             p2Card = p2.putCard();
             cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
             cout.flush();
-
             // add playes to lastTurnLog
             this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
             numberOfCardsThrewInTurn += 4;
@@ -108,9 +108,8 @@ namespace ariel
         {
             if (p2Card.getNumber() == 1 && p1Card.getNumber() == 2) // Ace wins 2
             {
-                cout << "p2 wins"<< endl;;
+                cout << "p2 wins" << endl;
                 cout.flush();
-
                 p2.setWins();
                 p2.setWinRate();
                 p2.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
@@ -118,9 +117,8 @@ namespace ariel
             }
             else
             {
-                cout << "p1 wins" <<endl;
+                cout << "p1 wins" << endl;
                 cout.flush();
-
                 p1.setWins();
                 p1.setWinRate();
                 p1.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
