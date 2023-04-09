@@ -21,8 +21,9 @@ namespace ariel
             }
         }
         // shuffleing the deck (ChatGPT)
-        srand(time(NULL));
-        shuffle(deck.begin(), deck.end(), default_random_engine());
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(deck.begin(), deck.end(), g);
         // dealing 26 cards to each player
         for (unsigned long int i = 0; i < 26; i++)
         {
@@ -59,7 +60,7 @@ namespace ariel
                 p2.setRoundsPlayed();
                 p1.setDrawRate();
                 p2.setDrawRate();
-                turnLog += "Draw!";
+                turnLog += " Draw! ";
                 try // if players run out of cards during turn, it throws exception
                 {
                     // two faced-down cards -- throws exception if one player runs out of cards
@@ -81,14 +82,14 @@ namespace ariel
             //  Ace strong against all execpt for 2
             if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
             {
-                turnLog += this->p1.getName() + " wins.";
+                turnLog += " " + this->p1.getName() + " wins.";
                 p1.setRoundsPlayed();
                 p1.winTurn(cardsOnTable);
                 p2.setRoundsPlayed();
             }
             else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
             {
-                turnLog += this->p2.getName() + " wins.";
+                turnLog += " " + this->p2.getName() + " wins.";
                 p2.setRoundsPlayed();
                 p2.winTurn(cardsOnTable);
                 p1.setRoundsPlayed();
@@ -96,27 +97,26 @@ namespace ariel
             // two regular cases- one player has crad with higher number than the other
             else if (p1Card.getNumber() > p2Card.getNumber())
             {
-                turnLog += this->p1.getName() + " wins.";
+                turnLog += " " + this->p1.getName() + " wins.";
                 p1.setRoundsPlayed();
                 p1.winTurn(cardsOnTable);
                 p2.setRoundsPlayed();
             }
             else if (p2Card.getNumber() > p1Card.getNumber())
             {
-                turnLog += this->p2.getName() + " wins.";
+                turnLog += " " + this->p2.getName() + " wins.";
                 p2.setRoundsPlayed();
                 p2.winTurn(cardsOnTable);
                 p1.setRoundsPlayed();
             }
         }
         turnLog += "\n";
-        this->logs.push_back(turnLog);
+        this->gameLogs.push_back(turnLog);
     };
 
     void Game::printLastTurn()
     {
-        cout << this->logs.back();
-        cout << this->logs.back();
+        cout << this->gameLogs.back();
     };
     void Game::playAll()
     {
@@ -128,22 +128,22 @@ namespace ariel
         // find the winner- NOTE! case of a tie is default (look at the default constructor of Player)
         if (p1.cardesTaken() < p2.cardesTaken())
         {
-            this->winner = p1;
+            this->winner = p2;
         }
         else if (p2.cardesTaken() < p1.cardesTaken())
         {
-            this->winner = p2;
+            this->winner = p1;
         }
     };
 
     void Game::printWiner()
     {
-        cout << this->winner.getName();
+        cout << "The winner is :" << this->winner.getName()<< endl;;
     };
 
     void Game::printLog()
     {
-        for (string turnLog : this->logs)
+        for (string turnLog : this->gameLogs)
         {
             cout << turnLog;
         }

@@ -14,8 +14,7 @@ namespace ariel
         Player winner;
         int amountOfDraws;
         int amountOfRounds;
-        vector<string> logs;
-        string get_round_log();
+        vector<string> gameLogs;
 
     public:
         Game(Player &p1, Player &p2);
