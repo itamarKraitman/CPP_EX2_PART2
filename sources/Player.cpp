@@ -101,11 +101,11 @@ namespace ariel
         stats += "\nDraws number: " + to_string(this->draws);
 
         ostringstream stream; // round to 2 decimal places (ChatGPT)
-        stream << fixed << setprecision(1) << this->winRate;
+        stream << fixed << setprecision(2) << this->winRate;
         stats += "\nWin rate: " + stream.str();
 
         stream.str("");
-        stream << fixed << setprecision(1) << this->drawsRate;
+        stream << fixed << setprecision(2) << this->drawsRate;
         stats += "\nDraws rate: " + stream.str();
 
         return stats;

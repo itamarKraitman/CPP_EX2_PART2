@@ -56,6 +56,7 @@ namespace ariel
             // war case- both players played cards with same number, lasts as long as both players plays cards with same number or running out of cards
             while (p1Card.getNumber() == p2Card.getNumber())
             {
+                // increase rounds played by 1 to both players and draw rate as well
                 p1.setRoundsPlayed();
                 p2.setRoundsPlayed();
                 p1.setDrawRate();
@@ -82,35 +83,19 @@ namespace ariel
             //  Ace strong against all execpt for 2
             if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
             {
-                // turnLog += " " + this->p1.getName() + " wins.";
-                // p1.setRoundsPlayed();
-                // p1.winTurn(cardsOnTable);
-                // p2.setRoundsPlayed();
                 turnLog += winnerRoutin(p1, p2, cardsOnTable);
             }
             else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
             {
-                // turnLog += " " + this->p2.getName() + " wins.";
-                // p2.setRoundsPlayed();
-                // p2.winTurn(cardsOnTable);
-                // p1.setRoundsPlayed();
                 turnLog += winnerRoutin(p2, p1, cardsOnTable);
             }
             // two regular cases- one player has crad with higher number than the other
             else if (p1Card.getNumber() > p2Card.getNumber())
             {
-                // turnLog += " " + this->p1.getName() + " wins.";
-                // p1.setRoundsPlayed();
-                // p1.winTurn(cardsOnTable);
-                // p2.setRoundsPlayed();
                 turnLog += winnerRoutin(p1, p2, cardsOnTable);
             }
             else if (p2Card.getNumber() > p1Card.getNumber())
             {
-                // turnLog += " " + this->p2.getName() + " wins.";
-                // p2.setRoundsPlayed();
-                // p2.winTurn(cardsOnTable);
-                // p1.setRoundsPlayed();
                 turnLog += winnerRoutin(p2, p1, cardsOnTable);
             }
         }
@@ -118,9 +103,10 @@ namespace ariel
         this->gameLogs.push_back(turnLog);
     }
 
-    string Game::winnerRoutin(Player &winner, Player &looser,int cardsOnTable)
+    string Game::winnerRoutin(Player &winner, Player &looser, int cardsOnTable)
     {
         string log = " " + winner.getName() + " wins.";
+        // increase number of rounds playrd by 1, and win turn by 1 to winner
         winner.setRoundsPlayed();
         winner.winTurn(cardsOnTable);
         looser.setRoundsPlayed();
@@ -133,7 +119,7 @@ namespace ariel
     }
     void Game::playAll()
     {
-        while (this->p1.stacksize() > 0 && this->p2.stacksize() > 0)
+        while (this->p1.stacksize() > 0 && this->p2.stacksize() > 0) // can play iff both players have cards to play with
         {
             playTurn();
         }
