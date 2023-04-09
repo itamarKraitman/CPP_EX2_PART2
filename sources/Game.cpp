@@ -109,7 +109,14 @@ namespace ariel
 
     void Game::printLastTurn()
     {
-        cout << this->gameLogs.back();
+        if (this->gameLogs.empty())
+        {
+            cout << "Game has not statrted yet" << endl;
+        }
+        else
+        {
+            cout << this->gameLogs.back();
+        }
     }
     void Game::playAll()
     {
@@ -131,15 +138,28 @@ namespace ariel
 
     void Game::printWiner()
     {
-        cout << "The winner is :" << this->winner.getName() << endl;
-        ;
+        if (this->gameLogs.empty())
+        {
+            cout << "Game has not statrted yet" << endl;
+        }
+        else
+        {
+            cout << "The winner is :" << this->winner.getName() << endl;
+        }
     }
 
     void Game::printLog()
     {
-        for (string turnLog : this->gameLogs)
+        if (this->gameLogs.empty())
         {
-            cout << turnLog;
+            cout << "Game has not statrted yet" << endl;
+        }
+        else
+        {
+            for (string turnLog : this->gameLogs)
+            {
+                cout << turnLog;
+            }
         }
     }
     void Game::printStats()

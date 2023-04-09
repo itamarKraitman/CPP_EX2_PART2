@@ -83,13 +83,11 @@ namespace ariel
     {
         this->cardstaken += amountOfCards;
         this->wins++;
-        // this->winRate = (float)this->wins / this->turns;
     }
 
     void Player::setDrawRate()
     {
         this->draws++;
-        // this->drawsRate = (float)this->draws / this->turns;
     }
 
     string Player::playerStats()
