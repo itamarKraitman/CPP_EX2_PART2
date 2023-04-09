@@ -32,12 +32,12 @@ namespace ariel
         this->draws = 0;
         this->winRate = 0;
         this->drawsRate = 0;
-    };
+    }
 
     int Player::stacksize()
     {
         return this->stack.size();
-    };
+    }
     int Player::cardesTaken()
     {
         return this->cardstaken;
@@ -58,7 +58,7 @@ namespace ariel
         {
             throw runtime_error("Player runs out of cards, cant play turn");
         }
-    };
+    }
 
     string Player::turnLog(Card card)
     {
@@ -110,5 +110,4 @@ namespace ariel
 
         return stats;
     }
-
 }

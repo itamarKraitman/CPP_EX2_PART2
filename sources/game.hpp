@@ -15,6 +15,7 @@ namespace ariel
         int amountOfDraws;
         int amountOfRounds;
         vector<string> gameLogs;
+        string winnerRoutin(Player &winner, Player &looser,int cardsOnTable);
 
     public:
         Game(Player &p1, Player &p2);

@@ -72,7 +72,7 @@ namespace ariel
                     turnLog += this->p1.getName() + " card is: " + p1Card.toString() + ", " + this->p2.getName() + " card is: " + p2Card.toString() + ".";
                     cardsOnTable += 4;
                 }
-                catch (exception e) // both players run out of cards, game ends
+                catch (exception e) // both players run out of cards, game ends and each player take the cards he put on the table
                 {
                     p1.setCardsTaken(cardsOnTable / 2);
                     p2.setCardsTaken(cardsOnTable / 2);
@@ -82,42 +82,55 @@ namespace ariel
             //  Ace strong against all execpt for 2
             if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
             {
-                turnLog += " " + this->p1.getName() + " wins.";
-                p1.setRoundsPlayed();
-                p1.winTurn(cardsOnTable);
-                p2.setRoundsPlayed();
+                // turnLog += " " + this->p1.getName() + " wins.";
+                // p1.setRoundsPlayed();
+                // p1.winTurn(cardsOnTable);
+                // p2.setRoundsPlayed();
+                turnLog += winnerRoutin(p1, p2, cardsOnTable);
             }
             else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
             {
-                turnLog += " " + this->p2.getName() + " wins.";
-                p2.setRoundsPlayed();
-                p2.winTurn(cardsOnTable);
-                p1.setRoundsPlayed();
+                // turnLog += " " + this->p2.getName() + " wins.";
+                // p2.setRoundsPlayed();
+                // p2.winTurn(cardsOnTable);
+                // p1.setRoundsPlayed();
+                turnLog += winnerRoutin(p2, p1, cardsOnTable);
             }
             // two regular cases- one player has crad with higher number than the other
             else if (p1Card.getNumber() > p2Card.getNumber())
             {
-                turnLog += " " + this->p1.getName() + " wins.";
-                p1.setRoundsPlayed();
-                p1.winTurn(cardsOnTable);
-                p2.setRoundsPlayed();
+                // turnLog += " " + this->p1.getName() + " wins.";
+                // p1.setRoundsPlayed();
+                // p1.winTurn(cardsOnTable);
+                // p2.setRoundsPlayed();
+                turnLog += winnerRoutin(p1, p2, cardsOnTable);
             }
             else if (p2Card.getNumber() > p1Card.getNumber())
             {
-                turnLog += " " + this->p2.getName() + " wins.";
-                p2.setRoundsPlayed();
-                p2.winTurn(cardsOnTable);
-                p1.setRoundsPlayed();
+                // turnLog += " " + this->p2.getName() + " wins.";
+                // p2.setRoundsPlayed();
+                // p2.winTurn(cardsOnTable);
+                // p1.setRoundsPlayed();
+                turnLog += winnerRoutin(p2, p1, cardsOnTable);
             }
         }
         turnLog += "\n";
         this->gameLogs.push_back(turnLog);
-    };
+    }
+
+    string Game::winnerRoutin(Player &winner, Player &looser,int cardsOnTable)
+    {
+        string log = " " + winner.getName() + " wins.";
+        winner.setRoundsPlayed();
+        winner.winTurn(cardsOnTable);
+        looser.setRoundsPlayed();
+        return log;
+    }
 
     void Game::printLastTurn()
     {
         cout << this->gameLogs.back();
-    };
+    }
     void Game::playAll()
     {
         while (this->p1.stacksize() > 0 && this->p2.stacksize() > 0)
@@ -134,12 +147,13 @@ namespace ariel
         {
             this->winner = p1;
         }
-    };
+    }
 
     void Game::printWiner()
     {
-        cout << "The winner is :" << this->winner.getName()<< endl;;
-    };
+        cout << "The winner is :" << this->winner.getName() << endl;
+        ;
+    }
 
     void Game::printLog()
     {
@@ -147,12 +161,12 @@ namespace ariel
         {
             cout << turnLog;
         }
-    };
+    }
     void Game::printStats()
     {
         string p1Stats = this->p1.playerStats();
         string p2Stats = this->p2.playerStats();
         cout << p1Stats << "\n\n"
              << p2Stats << endl;
-    };
+    }
 };

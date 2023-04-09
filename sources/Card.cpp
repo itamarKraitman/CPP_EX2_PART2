@@ -9,7 +9,7 @@ namespace ariel
     {
         this->number = number;
         this->sign = sign;
-    };
+    }
 
     string Card::toString()
     {
@@ -52,7 +52,7 @@ namespace ariel
         }
 
         return numberAsString + " of " + signAsString;
-    };
+    }
 
     int Card::getNumber()
     {
