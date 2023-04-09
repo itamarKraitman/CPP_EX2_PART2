@@ -152,7 +152,7 @@ namespace ariel
     {
         string p1Stats = this->p1.playerStats();
         string p2Stats = this->p2.playerStats();
-        cout << p1Stats << "\n\n"
+        cout << p1Stats << "\n"
              << p2Stats << endl;
     };
 };
