@@ -1,51 +1,29 @@
-
-#pragma once 
-
+#pragma once
 #include "player.hpp"
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-#include <random>
-#include <chrono>
+#include "card.hpp"
 
-using namespace std;
+namespace ariel
+{
+    using namespace std;
 
-namespace ariel {
-    class Game {
-        Player& p1;
-        Player& p2;
-        string winner;
-        string gameLog;
-        stringstream lastTurnLog;
-    
-        public:
+    class Game
+    {
+    private:
+        Player &p1;
+        Player &p2;
+        Player winner;
+        int amountOfDraws;
+        int amountOfRounds;
+        vector<string> logs;
+        string get_round_log();
 
-        Game(Player& player1, Player& player2);// constructor
-
-        Game(const Game& game) noexcept; // copy constructor
-
-        Game& operator=(const Game& other); // copy assignment operator
-
-        Game(Game&& other) noexcept; // move constructor
-
-        Game& operator=(Game&& other) noexcept; // move assignment operator
-
-        ~Game();
-
+    public:
+        Game(Player &p1, Player &p2);
         void playTurn();
-
         void printLastTurn();
-
         void playAll();
-
         void printWiner();
-
         void printLog();
-
         void printStats();
-
-        Player getWinner();
     };
-}
+};

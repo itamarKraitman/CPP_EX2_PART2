@@ -1,203 +1,158 @@
 
-#include <iostream>
-#include <sstream>
 #include "game.hpp"
 #include "player.hpp"
-
-using namespace std;
-
+#include <algorithm>
+#include <iostream>
+#include <random>
 namespace ariel
 {
+    using namespace std;
 
     Game::Game(Player &player1, Player &player2) : p1(player1), p2(player2)
     {
-        if (player1.registred() || player2.registred())
+        this->winner = Player();
+        // generating deck of 52 cards
+        vector<Card> deck;
+        for (int i = 1; i <= 13; i++) // generate deck (ChatGPT)
         {
-            throw invalid_argument("Player can be registred only to one game!");
-        }
-        this->p1 = player1;
-        this->p2 = player2;
-        this->winner = "";
-        // generate cards and push into the deck
-        vector<Card> deck(52);
-        for (int i = 0; i < 13; i++)
-        {
-            for (signs j = Clubs; j <= Spades; j = signs(j + 1))
+            for (int j = Clubs; j <= Spades; j++)
             {
-                Card newCard(i + 1, j);
-                deck.push_back(newCard);
+                deck.push_back(Card(i, static_cast<Signs>(j)));
             }
         }
-
-        // shuffle the deck
-        unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+        // shuffleing the deck (ChatGPT)
+        srand(time(NULL));
         shuffle(deck.begin(), deck.end(), default_random_engine());
-
-        for (int i = 0; i < 26; i++)
+        // dealing 26 cards to each player
+        for (unsigned long int i = 0; i < 26; i++)
         {
-            Card card1 = deck.back();
-            deck.pop_back();
-            p1.pushToStack(card1);
-            cout << "p1 dealt: " << p1.getStack().back().toString() << endl;
-
-            Card card2 = deck.back();
-            deck.pop_back();
-            p2.pushToStack(card2);
-            cout << "p2 dealt: " << p1.getStack().back().toString() << endl;
+            p1.pushToStack(deck[i]);
+            p2.pushToStack(deck[i + 26]);
         }
     }
-
-    Game::Game(const Game &game) noexcept : p1(game.p1), p2(game.p2) {}
-
-    Game &Game::operator=(const Game &other) { return *this; } // copy assignment operator
-
-    Game &Game::operator=(Game &&other) noexcept { return *this; } // move assignment operator
-
-    Game::Game(Game &&other) noexcept : p1(other.p1), p2(other.p2) {} // move constructor
-
-    Game::~Game() {}
-
-    static int turnCounter = 0;
-
     void Game::playTurn()
     {
-        // cout << "turn: p1 stack: " << p1.getStack().size() << " p2 stack: " << p2.getStack().size() << endl;
-        if (&p1 == &p2)
+        if (&p1 == &p2) // in my opinion, it should be in constructor, but for tests it's here
         {
-            throw runtime_error("The game has only one player");
+            throw "Player can't player against himself";
         }
-        if (turnCounter == 26)
-        {
-            throw runtime_error("Game is over, can't play turns anymore");
-        }
-        int numberOfCardsThrewInTurn = 2; // in each turn at least 2 cards are thrown
 
-        // both players throw cards
-        Card p1Card = p1.putCard();
-        Card p2Card = p2.putCard();
-       
-        cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
-        cout.flush();
-        this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
-        while (p1Card.getNumber() == p2Card.getNumber()) // war scenario, until there is no draw so no war
+        if (p1.stacksize() == 0 || p2.stacksize() == 0)
         {
-          
-            cout << "Draw!" << endl;
-            cout.flush();
-
-            this->lastTurnLog << " draw.";
-            p1.setNumberOfDraws();
-            p2.setNumberOfDraws();
-            p1.setDrawRate();
-            p2.setDrawRate();
-            // both put card down- need to check if not causing data leak
-            p1.putCard();
-            p2.putCard();
-            // both put card up
-            p1Card = p1.putCard();
-            p2Card = p2.putCard();
-            cout << "P1 card is: " << p1Card.toString() << ", P2 card is: " << p2Card.toString();
-            cout.flush();
-            // add playes to lastTurnLog
-            this->lastTurnLog << "p1 plays " << p1Card.getNumber() << " of " << p1Card.getSign() << " p2 plays " << p2Card.getNumber() << " of " << p2Card.getSign();
-            numberOfCardsThrewInTurn += 4;
+            throw "One player is run out of cards";
         }
-        // both stack-- if can, if player runs out of cards he looses- in putCard()
-        // if p1 wins: add cards to taken, win rate++, update win rate
-        if (p1Card.getNumber() > p2Card.getNumber())
-        {
-            if (p2Card.getNumber() == 1 && p1Card.getNumber() == 2) // Ace wins 2
-            {
-                cout << "p2 wins" << endl;
-                cout.flush();
-                p2.setWins();
-                p2.setWinRate();
-                p2.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
-                this->lastTurnLog << "p2 wins.\n";
-            }
-            else
-            {
-                cout << "p1 wins" << endl;
-                cout.flush();
-                p1.setWins();
-                p1.setWinRate();
-                p1.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
-                this->lastTurnLog << "p1 wins.\n";
-            }
-        }
-        else if (p2Card.getNumber() > p1Card.getNumber())
-        {
-            if (p1Card.getNumber() == 1 && p2Card.getNumber() == 2) // Ace wins 2
-            {
-                cout << "p1 wins" << endl;
-                cout.flush();
 
-                p1.setWins();
-                p1.setWinRate();
-                p1.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
-                this->lastTurnLog << "p1 wins.\n";
-            }
-            else
+        string turnLog = "";
+        int cardsOnTable = 0; // how many cards on table, taken by the turn winner at the end of the turn
+
+        if (this->p1.stacksize() > 0 && this->p2.stacksize() > 0) // play turn iff both players have at least one card
+        {
+            Card p1Card = this->p1.putCard();
+            Card p2Card = this->p2.putCard();
+            cardsOnTable += 2;
+            turnLog += this->p1.getName() + " card is: " + p1Card.toString() + ", " + this->p2.getName() + " card is: " + p2Card.toString() + ".";
+
+            // war case- both players played cards with same number, lasts as long as both players plays cards with same number or running out of cards
+            while (p1Card.getNumber() == p2Card.getNumber())
             {
-                cout << "p2 wins" << endl;
-                cout.flush();
-                p2.setWins();
-                p2.setWinRate();
-                p2.addCardsToPlayerTaken(numberOfCardsThrewInTurn);
-                this->lastTurnLog << "p2 wins.\n";
+                p1.setRoundsPlayed();
+                p2.setRoundsPlayed();
+                p1.setDrawRate();
+                p2.setDrawRate();
+                turnLog += "Draw!";
+                try // if players run out of cards during turn, it throws exception
+                {
+                    // two faced-down cards -- throws exception if one player runs out of cards
+                    this->p1.putCard();
+                    this->p2.putCard();
+                    // two daced-up cards
+                    p1Card = this->p1.putCard();
+                    p2Card = this->p2.putCard();
+                    turnLog += this->p1.getName() + " card is: " + p1Card.toString() + ", " + this->p2.getName() + " card is: " + p2Card.toString() + ".";
+                    cardsOnTable += 4;
+                }
+                catch (exception e) // both players run out of cards, game ends
+                {
+                    p1.setCardsTaken(cardsOnTable / 2);
+                    p2.setCardsTaken(cardsOnTable / 2);
+                    break;
+                }
+            }
+            //  Ace strong against all execpt for 2
+            if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
+            {
+                turnLog += this->p1.getName() + " wins.";
+                p1.setRoundsPlayed();
+                p1.winTurn(cardsOnTable);
+                p2.setRoundsPlayed();
+            }
+            else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
+            {
+                turnLog += this->p2.getName() + " wins.";
+                p2.setRoundsPlayed();
+                p2.winTurn(cardsOnTable);
+                p1.setRoundsPlayed();
+            }
+            // two regular cases- one player has crad with higher number than the other
+            else if (p1Card.getNumber() > p2Card.getNumber())
+            {
+                turnLog += this->p1.getName() + " wins.";
+                p1.setRoundsPlayed();
+                p1.winTurn(cardsOnTable);
+                p2.setRoundsPlayed();
+            }
+            else if (p2Card.getNumber() > p1Card.getNumber())
+            {
+                turnLog += this->p2.getName() + " wins.";
+                p2.setRoundsPlayed();
+                p2.winTurn(cardsOnTable);
+                p1.setRoundsPlayed();
             }
         }
-        this->gameLog += lastTurnLog.str(); // add turn log to gameLog
-        this->lastTurnLog << "";
-    }
-
-    // Card Game::putCard(Player& player)
-    // { // puts the next card from player's deck
-    //     if (player.getStack().size() > 0)
-    //     {
-    //         Card topCard = player.getStack().front();
-    //         player.getStack().erase(player.getStack().begin()); // remove first element
-    //         return topCard;
-    //     }
-    //     else
-    //     {
-    //         string s = "Game ends " + player.getName() + " is running out of cards, stack: " + to_string(player.getStack().size());
-    //         throw runtime_error(s);
-    //     }
-    // }
+        turnLog += "\n";
+        this->logs.push_back(turnLog);
+    };
 
     void Game::printLastTurn()
     {
-        cout << this->lastTurnLog.str() << endl;
-    }
-
+        cout << this->logs.back();
+        cout << this->logs.back();
+    };
     void Game::playAll()
     {
-        // cout << "p1 stack: " << p1.getStack().size() << " p2 stack: " << p2.getStack().size() << endl;
-        while (p1.getStack().size() > 0 && p2.getStack().size() > 0 && turnCounter < 26)
+        while (this->p1.stacksize() > 0 && this->p2.stacksize() > 0)
         {
-            cout << turnCounter << endl;
             playTurn();
-            turnCounter++;
         }
-        turnCounter = 0; // after the game is ended, modify to 0 so the next game could be played
-    }
+
+        // find the winner- NOTE! case of a tie is default (look at the default constructor of Player)
+        if (p1.cardesTaken() < p2.cardesTaken())
+        {
+            this->winner = p1;
+        }
+        else if (p2.cardesTaken() < p1.cardesTaken())
+        {
+            this->winner = p2;
+        }
+    };
 
     void Game::printWiner()
     {
-        cout << this->winner;
-    }
+        cout << this->winner.getName();
+    };
 
     void Game::printLog()
     {
-        cout << this->gameLog << endl;
-    }
-
-    void Game::printStats() {} // TODO when tests come
-
-    Player Game::getWinner()
+        for (string turnLog : this->logs)
+        {
+            cout << turnLog;
+        }
+    };
+    void Game::printStats()
     {
-        return this->winner;
-    }
-
-}
+        string p1Stats = this->p1.playerStats();
+        string p2Stats = this->p2.playerStats();
+        cout << p1Stats << "\n\n"
+             << p2Stats << endl;
+    };
+};

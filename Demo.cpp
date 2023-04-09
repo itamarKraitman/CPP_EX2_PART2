@@ -23,7 +23,6 @@ int main()
   Player p2("Bob");
 
   Game game(p1, p2);
-  cout << "p1 stack : " << p1.getStack().size() << "p2 stack : " << p2.getStack().size() << endl;
 
   for (int i = 0; i < 5; i++)
   {

@@ -1,138 +1,114 @@
-
-#include <iostream>
-#include <string>
-#include <vector>
 #include "player.hpp"
-
-using namespace std;
+#include "card.hpp"
+#include <string>
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <iomanip>
 
 namespace ariel
 {
+    using namespace std;
 
-    Player::Player(const string name) : name(name)
+    Player::Player()
     {
-        this->stackSize = 0;
-        this->taken = 0;
-        this->isRegistred = false;
+        this->name = "It's a tie! no one won";
+        this->stack.clear();
+        this->cardstaken = 0;
+        this->rounds = 0;
+        this->wins = 0;
+        this->draws = 0;
         this->winRate = 0;
-        this->cardsWon = 0;
-        this->drawRate = 0;
-        this->drawsHappened = 0;
+        this->drawsRate = 0;
     }
 
-    Player::Player(const Player &player) noexcept {}
-
-    Player &Player::operator=(const Player &other) { return *this; } // copy assignment operator
-
-    Player::Player(Player &&other) noexcept {} // move constructor
-
-    Player &Player::operator=(Player &&other) noexcept { return *this; } // move assignment operator
-
-    Player::~Player() 
+    Player::Player(string name)
     {
-        // delete and free memory of all Cards in stack
-        stack.clear(); 
-        stack.shrink_to_fit();
-    }
+        this->name = name;
+        this->stack.clear();
+        this->cardstaken = 0;
+        this->rounds = 0;
+        this->wins = 0;
+        this->draws = 0;
+        this->winRate = 0;
+        this->drawsRate = 0;
+    };
 
-    string Player::getName() const
+    int Player::stacksize()
     {
-         return this->name; 
-    }
-
-    bool Player::registred() const
+        return this->stack.size();
+    };
+    int Player::cardesTaken()
     {
-        return this->isRegistred;
+        return this->cardstaken;
     }
-
-    int Player::stacksize() const
-    { 
-        return this->stack.size(); 
+    void Player::pushToStack(Card card)
+    {
+        this->stack.push_back(card);
     }
-
-    int Player::cardesTaken() const
-    { 
-        return this->taken; 
-    }
-
     Card Player::putCard()
-    { // puts the next card from player's deck
+    {
         if (this->stack.size() > 0)
         {
-            Card topCard = this->stack.front();
-            stack.erase(stack.begin()); // remove first element
-            return topCard;
+            Card card = this->stack.back();
+            this->stack.pop_back();
+            return card;
         }
         else
         {
-            cout << "name " << this->name << "stack: " << this->stackSize;
-            string s = "Game ends " + this->name + " is running out of cards, stack: " + to_string(this->stack.size());
-            throw runtime_error(s);
+            throw runtime_error("Player runs out of cards, cant play turn");
         }
-    }
+    };
 
-    void Player::addCardsToPlayerTaken(int amountToAdd) 
+    string Player::turnLog(Card card)
     {
-        this->taken += amountToAdd;
+        return this->name + " played " + card.toString();
     }
-
-    void Player::setStack(int numOfCardsToReduce) 
+    string Player::getName()
     {
-        this->stackSize += numOfCardsToReduce;
+        return this->name;
     }
 
-    void Player::setStack(Card card) 
-    { 
-        this->stack.insert(stack.begin(), card);
-    }
-
-    void Player::pushToStack(const Card& card) {
-        this->stack.push_back(card);
-        // cout << "name: " << this->name << " stack size: " << this->stack.size() << endl;
-    }
-
-    vector<Card>& Player::getStack()
+    void Player::setRoundsPlayed()
     {
-        return this->stack;
+        this->rounds++;
     }
 
-    double Player::getWinRate() const
-    { 
-        return this->winRate; 
-    }
-
-    void Player::setWinRate() 
+    void Player::setCardsTaken(int amountOfCards)
     {
-        this->winRate = this->wins / (this->wins + this->drawsHappened);
+        this->cardstaken += amountOfCards;
     }
 
-    double Player::getDrawRate() const
-    { 
-        return this->drawRate; 
-    }
-
-    void Player::setDrawRate() 
+    void Player::winTurn(int amountOfCards)
     {
-        this->drawRate = this->drawsHappened / (this->wins + this->drawsHappened);
-    }
-
-    int Player::getNumberOfDraws() const
-    { 
-        return this->drawsHappened; 
-    }
-
-    void Player::setNumberOfDraws() 
-    {
-        this->drawsHappened++;
-    }
-
-    int Player::getWins() const
-    {
-        return this->wins;
-    }
-
-    void Player::setWins()
-    {
+        this->cardstaken += amountOfCards;
         this->wins++;
+        this->winRate = (float)this->wins / this->rounds;
     }
+
+    void Player::setDrawRate()
+    {
+        this->draws++;
+        this->drawsRate = (float)this->draws / this->rounds;
+    }
+
+    string Player::playerStats()
+    {
+        string stats = "\n";
+        stats += this->name + " report:";
+        stats += "\nCards won: " + to_string(this->cardstaken);
+        stats += "\nWins number: " + to_string(this->wins);
+        stats += "\nDraws number: " + to_string(this->draws);
+
+        ostringstream stream; // round to 2 decimal places (ChatGPT)
+        stream << fixed << setprecision(1) << this->winRate;
+        stats += "\nWin rate: " + stream.str();
+
+        stream.str("");
+        stream << fixed << setprecision(1) << this->drawsRate;
+        stats += "\nDraws rate: " + stream.str();
+
+        return stats;
+    }
+
 }

@@ -1,90 +1,61 @@
-
 #include "card.hpp"
-#include <iostream>
 #include <string>
-#include <stdexcept>
-#include <sstream>
-
-using namespace std;
 
 namespace ariel
 {
-Card::Card() {}
+    using namespace std;
 
-Card::Card(int number, signs sign) // constructor
-{
-    this->number = number;
-    this->sign = sign;
-}
-
-Card::Card(const Card &card) noexcept
-{
-    try
+    Card::Card(int number, Signs sign)
     {
-        this->number = card.number;
-        this->sign = card.sign;
-    }
-    catch (const logic_error &e)
+        this->number = number;
+        this->sign = sign;
+    };
+
+    string Card::toString()
     {
-        cerr << e.what() << endl;
-    }
-}
+        string numberAsString;
+        string signAsString;
 
-Card &Card::operator=(const Card &other) { return *this; }
+        switch (this->number)
+        {
+        case 1:
+            numberAsString = "Ace";
+            break;
+        case 11:
+            numberAsString = "Prince";
+            break;
+        case 12:
+            numberAsString = "Queen";
+            break;
+        case 13:
+            numberAsString = "King";
+            break;
+        default:
+            numberAsString = to_string(this->number);
+            break;
+        }
 
-Card &Card::operator=(Card &&other) noexcept { return *this; } // move assignment operator
+        switch (this->sign)
+        {
+        case Diamonds:
+            signAsString = "Diamonds";
+            break;
+        case Spades:
+            signAsString = "Spades";
+            break;
+        case Hearts:
+            signAsString = "Hearts";
+            break;
+        default:
+            signAsString = "Clubs";
+            break;
+        }
 
-Card::Card(Card &&other) noexcept {}
+        return numberAsString + " of " + signAsString;
+    };
 
-Card::~Card() {} // distructor
-
-int Card::getNumber() const
-{
-    return this->number;
-}
-
-signs Card::getSign() const
-{
-    return this->sign;
-}
-
-string Card::toString() const
-{
-    string sgn;
-    string num;
-    switch (number)
+    int Card::getNumber()
     {
-    case 1:
-        num = "Ace";
-        break;
-    case 11:
-        num = "Prince";
-        break;
-    case 12:
-        num = "Queen";
-        break;
-    case 13:
-        num = "King";
-        break;
-    default:
-        num = to_string(number);
+        return this->number;
     }
-
-    switch (sign)
-    {
-    case signs::Clubs:
-        sgn = "Clubs";
-        break;
-    case signs::Diamonds:
-        sgn = "Diamonds";
-        break;
-    case signs::Hearts:
-        sgn = "Hearts";
-        break;
-    case signs::Spades:
-        sgn = "Spades";
-    }
-    return num + " of " + sgn;
-}
-
-}
+};

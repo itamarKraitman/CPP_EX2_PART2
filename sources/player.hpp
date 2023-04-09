@@ -1,76 +1,37 @@
-#pragma once 
-
-#include <iostream>
+#pragma once
 #include <string>
 #include <vector>
 #include "card.hpp"
 
-using namespace std;
+namespace ariel
+{
+    using namespace std;
 
-namespace ariel{
-
-    class Player {
-        private:
-
-        const string name;
+    class Player
+    {
+    private:
         vector<Card> stack;
-        int stackSize;
-        int taken;
-        bool isRegistred;
-        double winRate;
+        string name;
+        int rounds;
+        int cardstaken;
         int wins;
-        int cardsWon;
-        double drawRate;
-        int drawsHappened;
+        double winRate;
+        int draws;
+        double drawsRate;
 
-        public:
-
-        Player(const string name); // constructor
-
-        Player(const Player& player) noexcept; // copy constructor
-
-        Player& operator=(const Player& other); // copy assignment operator
-
-        Player(Player&& other) noexcept; // move constructor
-
-        Player& operator=(Player&& other) noexcept; // move assignment operator
-
-        ~Player();
-
-        string getName() const;
-
-        bool registred() const;
-
-        int stacksize() const;
-
-        int cardesTaken() const;
-
-        Card putCard(); // puts the next card in player's deck
-
-        void addCardsToPlayerTaken(int amountToAdd);
-
-        void setStack(int numOfCardsToReduce); // number of cards
-
-        void setStack(Card card); // add card to stack
-
-        void pushToStack(const Card& card);
-
-        vector<Card>& getStack();
-
-        double getWinRate() const;
-
-        void setWinRate();
-
-        double getDrawRate() const;
-
+    public:
+        Player();
+        Player(string name);
+        string getName();
+        int stacksize();
+        int cardesTaken();
+        void pushToStack(Card card);
+        Card putCard();
+        string turnLog(Card card);
+        string playerStats();
+        void setRoundsPlayed();
+        void setCardsTaken(int amountOfCards);
+        void winTurn(int amountOfCards);
         void setDrawRate();
-
-        int getNumberOfDraws() const;
-
-        void setNumberOfDraws();
-
-        int getWins() const;
-
-        void setWins();
     };
-}
+};
