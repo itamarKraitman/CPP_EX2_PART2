@@ -12,7 +12,7 @@ namespace ariel
     private:
         vector<Card> stack;
         string name;
-        int rounds;
+        int turns;
         int cardstaken;
         int wins;
         double winRate;
@@ -29,7 +29,7 @@ namespace ariel
         Card putCard();
         string turnLog(Card card);
         string playerStats();
-        void setRoundsPlayed();
+        void setTurnsPlayed();
         void setCardsTaken(int amountOfCards);
         void winTurn(int amountOfCards);
         void setDrawRate();

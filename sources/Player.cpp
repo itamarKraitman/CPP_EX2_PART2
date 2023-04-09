@@ -15,7 +15,7 @@ namespace ariel
         this->name = "It's a tie! no one won";
         this->stack.clear();
         this->cardstaken = 0;
-        this->rounds = 0;
+        this->turns = 0;
         this->wins = 0;
         this->draws = 0;
         this->winRate = 0;
@@ -27,7 +27,7 @@ namespace ariel
         this->name = name;
         this->stack.clear();
         this->cardstaken = 0;
-        this->rounds = 0;
+        this->turns = 0;
         this->wins = 0;
         this->draws = 0;
         this->winRate = 0;
@@ -69,9 +69,9 @@ namespace ariel
         return this->name;
     }
 
-    void Player::setRoundsPlayed()
+    void Player::setTurnsPlayed()
     {
-        this->rounds++;
+        this->turns++;
     }
 
     void Player::setCardsTaken(int amountOfCards)
@@ -83,13 +83,13 @@ namespace ariel
     {
         this->cardstaken += amountOfCards;
         this->wins++;
-        this->winRate = (float)this->wins / this->rounds;
+        // this->winRate = (float)this->wins / this->turns;
     }
 
     void Player::setDrawRate()
     {
         this->draws++;
-        this->drawsRate = (float)this->draws / this->rounds;
+        // this->drawsRate = (float)this->draws / this->turns;
     }
 
     string Player::playerStats()
@@ -100,12 +100,15 @@ namespace ariel
         stats += "\nWins number: " + to_string(this->wins);
         stats += "\nDraws number: " + to_string(this->draws);
 
+        this->winRate = (float)this->wins / this->turns;
+        this->drawsRate = (float)this->draws / this->turns;
+
         ostringstream stream; // round to 2 decimal places (ChatGPT)
-        stream << fixed << setprecision(2) << this->winRate;
+        stream << fixed << setprecision(1) << this->winRate;
         stats += "\nWin rate: " + stream.str();
 
         stream.str("");
-        stream << fixed << setprecision(2) << this->drawsRate;
+        stream << fixed << setprecision(1) << this->drawsRate;
         stats += "\nDraws rate: " + stream.str();
 
         return stats;

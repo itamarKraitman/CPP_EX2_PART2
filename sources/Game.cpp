@@ -48,6 +48,8 @@ namespace ariel
 
         if (this->p1.stacksize() > 0 && this->p2.stacksize() > 0) // play turn iff both players have at least one card
         {
+            p1.setTurnsPlayed(); // increase number of turns by 1
+            p2.setTurnsPlayed();
             Card p1Card = this->p1.putCard();
             Card p2Card = this->p2.putCard();
             cardsOnTable += 2;
@@ -56,9 +58,7 @@ namespace ariel
             // war case- both players played cards with same number, lasts as long as both players plays cards with same number or running out of cards
             while (p1Card.getNumber() == p2Card.getNumber())
             {
-                // increase rounds played by 1 to both players and draw rate as well
-                p1.setRoundsPlayed();
-                p2.setRoundsPlayed();
+                // increase Turns played by 1 to both players and draw rate as well
                 p1.setDrawRate();
                 p2.setDrawRate();
                 turnLog += " Draw! ";
@@ -83,34 +83,28 @@ namespace ariel
             //  Ace strong against all execpt for 2
             if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
             {
-                turnLog += winnerRoutin(p1, p2, cardsOnTable);
+                turnLog += " " + p1.getName() + " wins.";
+                p1.winTurn(cardsOnTable);
             }
             else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
             {
-                turnLog += winnerRoutin(p2, p1, cardsOnTable);
+                turnLog += " " + p2.getName() + " wins.";
+                p2.winTurn(cardsOnTable);
             }
             // two regular cases- one player has crad with higher number than the other
             else if (p1Card.getNumber() > p2Card.getNumber())
             {
-                turnLog += winnerRoutin(p1, p2, cardsOnTable);
+                turnLog += " " + p1.getName() + " wins.";
+                p1.winTurn(cardsOnTable);
             }
             else if (p2Card.getNumber() > p1Card.getNumber())
             {
-                turnLog += winnerRoutin(p2, p1, cardsOnTable);
+                turnLog += " " + p1.getName() + " wins.";
+                p1.winTurn(cardsOnTable);
             }
         }
         turnLog += "\n";
         this->gameLogs.push_back(turnLog);
-    }
-
-    string Game::winnerRoutin(Player &winner, Player &looser, int cardsOnTable)
-    {
-        string log = " " + winner.getName() + " wins.";
-        // increase number of rounds playrd by 1, and win turn by 1 to winner
-        winner.setRoundsPlayed();
-        winner.winTurn(cardsOnTable);
-        looser.setRoundsPlayed();
-        return log;
     }
 
     void Game::printLastTurn()
