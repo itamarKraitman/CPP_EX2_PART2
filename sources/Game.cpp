@@ -84,40 +84,19 @@ namespace ariel
             if (p1Card.getNumber() == 1 && p2Card.getNumber() != 2)
             {
                 turnLog += winnerRoutin(p1, p2, cardsOnTable);
-                // turnLog = " " + p1.getName() + " wins.";
-                // // increase number of rounds playrd by 1, and win turn by 1 to winner
-                // p1.setRoundsPlayed();
-                // p1.winTurn(cardsOnTable);
-                // p2.setRoundsPlayed();
-                // return log;
             }
             else if (p1Card.getNumber() != 2 && p2Card.getNumber() == 1)
             {
                 turnLog += winnerRoutin(p2, p1, cardsOnTable);
-                // turnLog = " " + p2.getName() + " wins.";
-                // // increase number of rounds playrd by 1, and win turn by 1 to winner
-                // p2.setRoundsPlayed();
-                // p2.winTurn(cardsOnTable);
-                // p1.setRoundsPlayed();
             }
             // two regular cases- one player has crad with higher number than the other
             else if (p1Card.getNumber() > p2Card.getNumber())
             {
                 turnLog += winnerRoutin(p1, p2, cardsOnTable);
-                // turnLog = " " + p1.getName() + " wins.";
-                // // increase number of rounds playrd by 1, and win turn by 1 to winner
-                // p1.setRoundsPlayed();
-                // p1.winTurn(cardsOnTable);
-                // p2.setRoundsPlayed();
             }
             else if (p2Card.getNumber() > p1Card.getNumber())
             {
                 turnLog += winnerRoutin(p2, p1, cardsOnTable);
-                // turnLog = " " + p2.getName() + " wins.";
-                // // increase number of rounds playrd by 1, and win turn by 1 to winner
-                // p2.setRoundsPlayed();
-                // p2.winTurn(cardsOnTable);
-                // p1.setRoundsPlayed();
             }
         }
         turnLog += "\n";
