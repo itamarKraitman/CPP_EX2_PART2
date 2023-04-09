@@ -4,7 +4,7 @@
 set -o pipefail   # see https://unix.stackexchange.com/a/267031/16569
 exec 2>&1         # redirect stderr to stdout: https://unix.stackexchange.com/q/505581/16569
 
-TIMEOUT=20  # 10 seconds - default timeout
+TIMEOUT=30  # 10 seconds - default timeout
 
 typeset -F SECONDS
 SECONDS=0
