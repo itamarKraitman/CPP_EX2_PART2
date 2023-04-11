@@ -19,10 +19,10 @@ namespace ariel
     public:
         Game(Player &p1, Player &p2);
         void playTurn();
-        void printLastTurn();
+        void printLastTurn() const;
         void playAll();
-        void printWiner();
-        void printLog();
-        void printStats();
+        void printWiner() const;
+        void printLog() const;
+        void printStats() const;
     };
 };

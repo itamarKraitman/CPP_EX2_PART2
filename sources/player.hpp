@@ -22,13 +22,13 @@ namespace ariel
     public:
         Player();
         Player(string name);
-        string getName();
-        int stacksize();
-        int cardesTaken();
-        void pushToStack(Card card);
+        string getName() const;
+        int stacksize() const;
+        int cardesTaken() const;
+        void pushToStack(const Card& card);
         Card putCard();
-        string turnLog(Card card);
-        string playerStats();
+        string turnLog(const Card& card) const;
+        string playerStats(); // not const because modifiying winRate and drawRate
         void setTurnsPlayed();
         void setCardsTaken(int amountOfCards);
         void winTurn(int amountOfCards);

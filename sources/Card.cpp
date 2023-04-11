@@ -11,7 +11,7 @@ namespace ariel
         this->sign = sign;
     }
 
-    string Card::toString()
+    string Card::toString() const
     {
         string numberAsString;
         string signAsString;
@@ -54,7 +54,7 @@ namespace ariel
         return numberAsString + " of " + signAsString;
     }
 
-    int Card::getNumber()
+    int Card::getNumber() const
     {
         return this->number;
     }

@@ -107,7 +107,7 @@ namespace ariel
         this->gameLogs.push_back(turnLog);
     }
 
-    void Game::printLastTurn()
+    void Game::printLastTurn() const
     {
         if (this->gameLogs.empty())
         {
@@ -136,7 +136,7 @@ namespace ariel
         }
     }
 
-    void Game::printWiner()
+    void Game::printWiner() const
     {
         if (this->gameLogs.empty())
         {
@@ -148,7 +148,7 @@ namespace ariel
         }
     }
 
-    void Game::printLog()
+    void Game::printLog() const
     {
         if (this->gameLogs.empty())
         {
@@ -162,7 +162,7 @@ namespace ariel
             }
         }
     }
-    void Game::printStats()
+    void Game::printStats() const
     {
         string p1Stats = this->p1.playerStats();
         string p2Stats = this->p2.playerStats();

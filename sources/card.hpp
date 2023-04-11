@@ -21,7 +21,7 @@ namespace ariel
 
     public:
         Card(int number, Signs sign);
-        string toString();
-        int getNumber();
+        string toString() const;
+        int getNumber() const;
     };
 };

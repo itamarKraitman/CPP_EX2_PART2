@@ -34,15 +34,15 @@ namespace ariel
         this->drawsRate = 0;
     }
 
-    int Player::stacksize()
+    int Player::stacksize() const
     {
         return this->stack.size();
     }
-    int Player::cardesTaken()
+    int Player::cardesTaken() const
     {
         return this->cardstaken;
     }
-    void Player::pushToStack(Card card)
+    void Player::pushToStack(const Card& card)
     {
         this->stack.push_back(card);
     }
@@ -60,11 +60,11 @@ namespace ariel
         }
     }
 
-    string Player::turnLog(Card card)
+    string Player::turnLog(const Card& card) const
     {
         return this->name + " played " + card.toString();
     }
-    string Player::getName()
+    string Player::getName() const
     {
         return this->name;
     }
