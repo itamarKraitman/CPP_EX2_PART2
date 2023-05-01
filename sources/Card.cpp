@@ -5,11 +5,7 @@ namespace ariel
 {
     using namespace std;
 
-    Card::Card(int number, Signs sign)
-    {
-        this->number = number;
-        this->sign = sign;
-    }
+    Card::Card(int number, Signs sign) : number(number), sign(sign) {}
 
     string Card::toString() const
     {

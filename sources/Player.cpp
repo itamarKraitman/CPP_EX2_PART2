@@ -22,9 +22,8 @@ namespace ariel
         this->drawsRate = 0;
     }
 
-    Player::Player(string name)
+    Player::Player(string name) : name(name)
     {
-        this->name = name;
         this->stack.clear();
         this->cardstaken = 0;
         this->turns = 0;

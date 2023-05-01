@@ -24,7 +24,7 @@ namespace ariel
         random_device rd;
         mt19937 g(rd());
         shuffle(deck.begin(), deck.end(), g);
-        // dealing 26 cards to each player
+        // dealing 26 cards to each player- dealing i and i + 1 did not work. do not know why exactly- GPT
         for (unsigned long int i = 0; i < 26; i++)
         {
             player1.pushToStack(deck[i]);
