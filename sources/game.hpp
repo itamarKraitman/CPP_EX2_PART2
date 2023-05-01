@@ -9,15 +9,15 @@ namespace ariel
     class Game
     {
     private:
-        Player &p1;
-        Player &p2;
+        Player &player1;
+        Player &player2;
         Player winner;
         int amountOfDraws;
         int amountOfRounds;
         vector<string> gameLogs;
 
     public:
-        Game(Player &p1, Player &p2);
+        Game(Player &player1, Player &player2);
         void playTurn();
         void printLastTurn() const;
         void playAll();
